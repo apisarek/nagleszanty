@@ -1,1 +1,58 @@
-nagle
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAGLE</title>
+    
+    <link rel="icon" type="image/svg+xml" href="nagle.svg">
+
+    <style>
+        /* 1. MATCH YOUR SVG BACKGROUND COLOR HERE */
+        :root {
+            --bg-color: #f3e6d7; 
+        }
+
+        /* 2. PREVENT SCROLL AND RESET BOX MODEL */
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-color);
+            overflow: hidden; /* Strict no-scroll */
+        }
+
+        /* 3. THE "ENTIRE SCREEN" CLICK AREA */
+        .full-screen-click {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent; /* Clean mobile tap */
+        }
+
+        /* 4. THE CENTERED SVG */
+        img {
+            max-width: 90%;
+            max-height: 90%;
+            pointer-events: none; /* Let the link handle the click */
+            user-select: none;    /* Prevents "saving image" accidental drag */
+        }
+    </style>
+</head>
+<body>
+
+    <a href="https://www.facebook.com/nagleszanty" class="full-screen-click">
+        <img src="nagle.svg" alt="Redirect Logo">
+    </a>
+
+</body>
+</html>
