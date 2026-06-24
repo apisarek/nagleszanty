@@ -50,6 +50,13 @@
     .segmented{display:flex;flex-wrap:wrap;gap:7px}
     .segment{min-width:39px;height:39px;padding:0 11px;border:1.5px solid var(--ink);border-radius:10px;background:transparent;font-weight:750;cursor:pointer}
     .segment[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+    .switch-control{width:max-content;display:flex;align-items:center;gap:12px;font-weight:750;cursor:pointer}
+    .switch-control input{position:absolute;opacity:0;pointer-events:none}
+    .switch{width:52px;height:30px;padding:3px;display:flex;align-items:center;border:2px solid var(--ink);border-radius:999px;transition:.15s}
+    .switch::after{content:"";width:20px;height:20px;border-radius:50%;background:var(--ink);transition:transform .15s}
+    .switch-control input:checked+.switch{background:var(--ink)}
+    .switch-control input:checked+.switch::after{background:var(--paper);transform:translateX(22px)}
+    .switch-control input:focus-visible+.switch{outline:3px solid #006d77;outline-offset:4px}
     .practice{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
     .stepper{display:flex;align-items:center;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden}
     .stepper button{width:38px;height:38px;border:0;background:transparent;cursor:pointer;font-size:20px}
@@ -109,6 +116,10 @@
         </div>
       </div>
       <div class="control-row">
+        <span class="label">Akcenty</span>
+        <label class="switch-control"><input id="accentToggle" type="checkbox" checked><span class="switch" aria-hidden="true"></span><span>Zmieniaj dźwięk w takcie</span></label>
+      </div>
+      <div class="control-row">
         <span class="label">Trening wewnętrznego metronomu</span>
         <div class="practice">
           <span>Graj</span>
@@ -134,7 +145,7 @@
         {label:'7/8',beats:7,groups:[3,2,2]}, {label:'9/8',beats:9,groups:[3,3,3]},
         {label:'12/8',beats:12,groups:[3,3,3,3]}
       ];
-      let bpm = 100, meter = meters[3], beats = meter.beats, playBars = 1, muteBars = 0, sound = 'classic';
+      let bpm = 100, meter = meters[3], beats = meter.beats, playBars = 1, muteBars = 0, sound = 'classic', variableAccents = true;
       let activeBeats = new Set(Array.from({length:beats},(_,i)=>i));
       let audio, timer, silentCarrier, audioUnlocked = false, playing = false, nextNoteTime = 0, beatIndex = 0, barIndex = 0, tapTimes = [];
 
@@ -167,12 +178,12 @@
         if (muted) return;
         const osc = audio.createOscillator(), gain = audio.createGain();
         const profiles = {
-          soft: {type:'sine', frequencies:[520,650,780], volumes:[.12,.16,.2], duration:.055},
-          classic: {type:'sine', frequencies:[820,1000,1250], volumes:[.18,.24,.32], duration:.045},
-          sharp: {type:'square', frequencies:[1450,1850,2300], volumes:[.26,.34,.44], duration:.075}
+          soft: {type:'sine', frequencies:[820,1000,1250], volumes:[.18,.24,.32], duration:.045},
+          classic: {type:'square', frequencies:[1450,1850,2300], volumes:[.26,.34,.44], duration:.075},
+          sharp: {type:'square', frequencies:[2400,3000,3800], volumes:[.4,.52,.66], duration:.09}
         };
         const profile = profiles[sound], level = Math.max(0,Math.min(2,accent));
-        const boostedVolume = Math.min(1.25, profile.volumes[level] * 2.25);
+        const boostedVolume = Math.min(2, profile.volumes[level] * 3.5);
         osc.type = profile.type; osc.frequency.value = profile.frequencies[level];
         gain.gain.setValueAtTime(0.0001,time); gain.gain.exponentialRampToValueAtTime(boostedVolume,time+.002); gain.gain.exponentialRampToValueAtTime(.0001,time+profile.duration);
         osc.connect(gain).connect(audio.destination); osc.start(time); osc.stop(time+profile.duration+.01);
@@ -180,7 +191,8 @@
       function schedule(beat, bar, time) {
         const muted = isMutedBar(bar);
         let cursor=0, groupAccent=false; for(const size of meter.groups){ if(beat===cursor){groupAccent=true;break} cursor+=size; }
-        click(time, beat === 0 ? 2 : groupAccent ? 1 : 0, muted || !activeBeats.has(beat));
+        const accent = variableAccents ? (beat === 0 ? 2 : groupAccent ? 1 : 0) : 0;
+        click(time, accent, muted || !activeBeats.has(beat));
         const delay = Math.max(0,(time-audio.currentTime)*1000);
         setTimeout(() => {
           if (!playing) return;
@@ -255,6 +267,7 @@
 
       meters.forEach((choice,index)=>{ const b=document.createElement('button'); b.className='segment'; b.textContent=choice.label; b.setAttribute('aria-pressed',index===3); b.onclick=()=>{meter=choice;beats=meter.beats;activeBeats=new Set(Array.from({length:beats},(_,i)=>i));$('#meterControl').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));beatIndex=0;barIndex=0;drawBeats();drawBeatControl()};$('#meterControl').append(b); });
       $('#soundControl').querySelectorAll('button').forEach(button=>button.onclick=()=>{ sound=button.dataset.sound; $('#soundControl').querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',item===button)); });
+      $('#accentToggle').onchange=e=>{ variableAccents=e.target.checked; };
       document.querySelectorAll('[data-step]').forEach(btn=>btn.onclick=()=>{ const key=btn.dataset.step, delta=Number(btn.dataset.delta); if(key==='play'){playBars=Math.max(1,Math.min(16,playBars+delta));$('#playBars').value=playBars}else{muteBars=Math.max(0,Math.min(16,muteBars+delta));$('#muteBars').value=muteBars} barIndex=0; });
       bpmInput.onchange=e=>setBpm(e.target.value); slider.oninput=e=>setBpm(e.target.value);
       $('#slower').onclick=()=>setBpm(bpm-1); $('#faster').onclick=()=>setBpm(bpm+1); startButton.onclick=toggle; $('#tap').onclick=tap;
