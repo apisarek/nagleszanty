@@ -172,7 +172,7 @@
           sharp: {type:'square', frequencies:[1450,1850,2300], volumes:[.26,.34,.44], duration:.075}
         };
         const profile = profiles[sound], level = Math.max(0,Math.min(2,accent));
-        const boostedVolume = Math.min(.95, profile.volumes[level] * 1.5);
+        const boostedVolume = Math.min(1.25, profile.volumes[level] * 2.25);
         osc.type = profile.type; osc.frequency.value = profile.frequencies[level];
         gain.gain.setValueAtTime(0.0001,time); gain.gain.exponentialRampToValueAtTime(boostedVolume,time+.002); gain.gain.exponentialRampToValueAtTime(.0001,time+profile.duration);
         osc.connect(gain).connect(audio.destination); osc.start(time); osc.stop(time+profile.duration+.01);
