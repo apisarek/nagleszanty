@@ -1,0 +1,121 @@
+{
+  "songs": [
+    {
+      "slug": "historia-kanoniera",
+      "title": "Historia kanoniera",
+      "lyricsAuthor": "Andrzej Pisarek",
+      "musicAuthor": "Andrzej Pisarek",
+      "key": "e",
+      "sections": [
+        {
+          "label": "1.",
+          "lines": [
+            { "text": "Opowiem wam historię kanoniera", "chords": ["e", "e", "D", "e"] },
+            { "text": "Na galeonie spędził żywot swój", "chords": ["C", "C", "D", "e"] },
+            { "text": "Nieważne czy pogoda mu doskwiera", "chords": ["e", "e", "D", "e"] },
+            { "text": "Poddany króla godnie rusza w bój", "chords": ["C", "C", "D", "e"] },
+            { "text": "Trze prochy w pył, węgiel oraz siarkę.", "chords": ["e", "e", "D", "e"] },
+            { "text": "Saletry też mu nie będzie żal.", "chords": ["C", "C", "D", "e"] },
+            { "text": "Sypie do lufy by rozpocząć walkę.", "chords": ["e", "e", "D", "e"] }
+          ]
+        },
+        {
+          "label": "Ref.",
+          "lines": [
+            { "text": "A ty", "chords": ["C"] },
+            { "text": "Ładuj kule", "chords": ["D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "Wal! 💥", "chords": ["e"] },
+            { "text": "Ładuj kule", "chords": ["e", "D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "", "chords": ["e"] }
+          ]
+        },
+        {
+          "label": "2.",
+          "lines": [
+            { "text": "Kanonier nasz tak jak jego tata", "chords": ["e", "e", "D", "e"] },
+            { "text": "Walczy dla króla czy to noc czy dzień", "chords": ["C", "C", "D", "e"] },
+            { "text": "Siostrą mu jest, żelazna armata", "chords": ["e", "e", "D", "e"] },
+            { "text": "Matkę spotyka, jedynie przez sen", "chords": ["C", "C", "D", "e"] },
+            { "text": "Długa rozłąka spaja ludzi morza,", "chords": [] },
+            { "text": "mijają lata wśród błękitu fal.", "chords": [] },
+            { "text": "I przeznaczeniem walka o przestworza", "chords": [] }
+          ]
+        },
+        {
+          "label": "Ref.",
+          "lines": [
+            { "text": "A ty", "chords": ["C"] },
+            { "text": "Ładuj kule", "chords": ["D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "Wal! 💥", "chords": ["e"] },
+            { "text": "Ładuj kule", "chords": ["e", "D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "", "chords": ["e"] }
+          ]
+        },
+        {
+          "label": "3.",
+          "lines": [
+            { "text": "Bohater pieśni ma stopień sierżanta", "chords": ["e", "e", "D", "e"] },
+            { "text": "Jego atutem jest sokoli wzrok", "chords": ["C", "C", "D", "e"] },
+            { "text": "Nieważny cel - czy to maszt czy wanta", "chords": ["e", "e", "D", "e"] },
+            { "text": "Bez zawahania trafia w rei nok", "chords": ["C", "C", "D", "e"] },
+            { "text": "Kula z łańcuchem, ognista albo kartacz,", "chords": [] },
+            { "text": "dziurawi wrogom floty każdy cal.", "chords": [] },
+            { "text": "Lecz ich modlitwa jest niewiele warta", "chords": [] }
+          ]
+        },
+        {
+          "label": "Ref.",
+          "lines": [
+            { "text": "A ty", "chords": ["C"] },
+            { "text": "Ładuj kule", "chords": ["D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "Wal! 💥", "chords": ["e"] },
+            { "text": "Ładuj kule", "chords": ["e", "D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "", "chords": ["e"] }
+          ]
+        },
+        {
+          "label": "4.",
+          "lines": [
+            { "text": "Kanonier już wrogów nie naznacza", "chords": ["e", "e", "a", "e"] },
+            { "text": "Wyruszył w drogę do Hilo na bal", "chords": ["C", "C", "h", "e"] },
+            { "text": "Bo zaproszenie dostał od garłacza", "chords": ["e", "e", "a", "e"] }
+          ]
+        },
+        {
+          "label": "Ref.",
+          "lines": [
+            { "text": "A ty", "chords": ["C"] },
+            { "text": "Ładuj kule", "chords": ["D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "Wal! 💥", "chords": ["e"] },
+            { "text": "Ładuj kule", "chords": ["e", "D"] },
+            { "text": "Pal! 💥 PAL! zetrzyj prochy", "chords": ["e"] },
+            { "text": "Pal! 💥 PAL! syp do lufy", "chords": ["C"] },
+            { "text": "Pal! 💥 PAL! i we wroga", "chords": ["D"] },
+            { "text": "", "chords": ["e"] }
+          ]
+        }
+      ]
+    }
+  ]
+}
