@@ -29,22 +29,27 @@
     .control button:hover,.reset:hover,.control button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
     .shift{min-width:82px;text-align:center;font-weight:850}
     .song{display:grid;gap:26px}
-    .section{display:grid;grid-template-columns:minmax(34px,54px) 1fr;gap:14px;padding-top:24px;border-top:1px solid var(--line);align-items:start}
+    .section{padding-top:24px;border-top:1px solid var(--line)}
     .section:first-child{border-top:0;padding-top:0}
-    .label{font-family:Nagle,Georgia,serif;font-size:clamp(20px,3vw,27px);font-weight:900;line-height:1.22;text-align:right}
-    .lines{display:grid;gap:13px;min-width:0}
-    .line{display:grid;grid-template-columns:1fr minmax(112px,max-content);gap:16px;align-items:baseline;min-width:0}
-    .chords{display:flex;gap:8px;min-height:22px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
-    .chord{display:inline-grid;place-items:center;min-width:48px;height:28px;padding:0 9px;border-radius:999px;background:var(--chip);color:#9b321f;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:19px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
-    .lyric{font-family:Nagle,Georgia,serif;font-size:clamp(18px,2.5vw,23px);line-height:1.26}
-    .line.no-chords .chords{visibility:hidden}
+    .section-label{display:inline-block;min-width:2.45em;padding-right:.55em;font-family:Nagle,Georgia,serif;font-weight:900;text-align:right}
+    .section-label.empty{visibility:hidden}
+    .lines{display:grid;gap:16px;min-width:0}
+    .line{display:grid;gap:2px;min-width:0}
+    .chords{display:flex;gap:clamp(16px,4vw,30px);min-height:18px;padding-left:2.45em;align-items:end;justify-content:flex-start;flex-wrap:wrap}
+    .chord{display:inline-block;min-width:1.6em;color:#8d3b2c;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:clamp(13px,1.75vw,16px);font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+    .chord sup{position:relative;top:-.12em;font-size:.94em;line-height:0;margin-left:.02em;margin-right:.03em}
+    .lyric{font-family:Nagle,Georgia,serif;font-size:clamp(17px,2.25vw,21px);line-height:1.26}
+    .song.hide-chords .line{gap:0}
+    .song.hide-chords .chords{display:none}
+    .line.no-chords{gap:0}
+    .line.no-chords .chords{display:none}
     .line.repeat .lyric{color:var(--muted);font-style:italic}
     .loading,.error{color:var(--muted);font-size:18px}
     a:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
     @media(max-width:700px){
       .page{padding:18px 14px 34px}
-      header{align-items:flex-start}.tools{position:static;align-items:flex-start}.section{grid-template-columns:34px 1fr;gap:10px}.label{font-size:20px}
-      .chords{gap:6px}.chord{min-width:44px;height:26px;font-size:18px}.authors{display:grid}
+      header{align-items:flex-start}.tools{position:static;align-items:flex-start}
+      .lines{gap:15px}.chords{gap:20px}.chord{font-size:14px}.authors{display:grid}
     }
   </style>
 </head>
@@ -73,6 +78,10 @@
         <button type="button" id="notationPolish" aria-pressed="true">PL</button>
         <button type="button" id="notationEnglish" aria-pressed="false">EN</button>
       </div>
+      <div class="control" aria-label="Widoczność akordów">
+        <span class="control-label">Akordy</span>
+        <button type="button" id="toggleChords" aria-pressed="true">Ukryj</button>
+      </div>
     </section>
 
     <article class="song" id="song" aria-live="polite">
@@ -100,6 +109,7 @@
     let song;
     let shift = 0;
     let notation = "polish";
+    let chordsVisible = true;
 
     const normalizeShift = (value) => ((value % 12) + 12) % 12;
 
@@ -116,6 +126,23 @@
       return (minor ? note.toLowerCase() : note) + suffix;
     };
 
+    const chordMarkup = (chord) => {
+      const polishMatch = chord.match(/^([A-Ha-h])((?:is|es|s)?)(.*)$/);
+      if (notation === "polish" && polishMatch) {
+        const [, root, accidental, suffix] = polishMatch;
+        return `${root}${accidental}${suffix}`;
+      }
+
+      const englishMatch = chord.match(/^([A-G])([#b]?)(.*)$/);
+      if (englishMatch) {
+        const [, root, accidental, suffix] = englishMatch;
+        const symbol = accidental === "#" ? "♯" : accidental === "b" ? "♭" : "";
+        return `${root}${symbol ? `<sup>${symbol}</sup>` : ""}${suffix}`;
+      }
+
+      return chord;
+    };
+
     const transposeChord = (chord) => {
       const match = chord.match(/^([A-H](?:is|es)?|[a-h](?:is|es)?)(.*)$/);
       if (!match) return chord;
@@ -130,7 +157,7 @@
       return formatChord(next, minor, suffix);
     };
 
-    const makeLine = (line) => {
+    const makeLine = (line, labelText = "") => {
       const row = document.createElement("div");
       row.className = `line${line.chords.length ? "" : " no-chords"}${line.text.includes("…") ? " repeat" : ""}`;
 
@@ -139,15 +166,20 @@
       line.chords.forEach((chord) => {
         const span = document.createElement("span");
         span.className = "chord";
-        span.textContent = transposeChord(chord);
+        span.innerHTML = chordMarkup(transposeChord(chord));
         chords.append(span);
       });
 
       const lyric = document.createElement("div");
       lyric.className = "lyric";
-      lyric.textContent = line.text || "\u00a0";
+      const label = document.createElement("span");
+      label.className = `section-label${labelText ? "" : " empty"}`;
+      label.textContent = labelText || "\u00a0";
+      const text = document.createElement("span");
+      text.textContent = line.text || "\u00a0";
+      lyric.append(label, text);
 
-      row.append(lyric, chords);
+      row.append(chords, lyric);
       return row;
     };
 
@@ -159,21 +191,20 @@
       shiftLabel.textContent = shift === 0 ? "0" : `${shift > 0 ? "+" : ""}${shift}`;
       document.querySelector("#notationPolish").setAttribute("aria-pressed", notation === "polish");
       document.querySelector("#notationEnglish").setAttribute("aria-pressed", notation === "english");
+      document.querySelector("#toggleChords").setAttribute("aria-pressed", chordsVisible);
+      document.querySelector("#toggleChords").textContent = chordsVisible ? "Ukryj" : "Pokaż";
       songEl.innerHTML = "";
+      songEl.classList.toggle("hide-chords", !chordsVisible);
 
       song.sections.forEach((section) => {
         const sectionEl = document.createElement("section");
         sectionEl.className = "section";
 
-        const label = document.createElement("div");
-        label.className = "label";
-        label.textContent = section.label;
-
         const lines = document.createElement("div");
         lines.className = "lines";
-        section.lines.forEach((line) => lines.append(makeLine(line)));
+        section.lines.forEach((line, index) => lines.append(makeLine(line, index === 0 ? section.label : "")));
 
-        sectionEl.append(label, lines);
+        sectionEl.append(lines);
         songEl.append(sectionEl);
       });
     };
@@ -190,6 +221,7 @@
     document.querySelector("#resetTranspose").addEventListener("click", () => { shift = 0; render(); });
     document.querySelector("#notationPolish").addEventListener("click", () => { notation = "polish"; render(); });
     document.querySelector("#notationEnglish").addEventListener("click", () => { notation = "english"; render(); });
+    document.querySelector("#toggleChords").addEventListener("click", () => { chordsVisible = !chordsVisible; render(); });
 
     const loadSong = (data) => {
       song = data.songs.find((item) => item.slug === "historia-kanoniera");
